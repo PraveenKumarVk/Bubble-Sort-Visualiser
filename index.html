@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Bubble Sort Visualiser</title>
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css2?family=Lexend+Mega&family=Merriweather+Sans&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Lexend+Mega&display=swap" rel="stylesheet">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+        <link rel="stylesheet" href="style.css">
+        <script type="text/javascript" src="paper-full.js"></script>
+        <script type="text/paperscript" canvas="myCanvas">
+            var allRects=[];
+            var width=5,insertioni=1,insertionj=0;
+            var window=view.size.width-40;
+            var numRects=100,gap=window/numRects;
+            var startBtn=document.querySelector("#start");
+            var stopBtn=document.querySelector("#stop");
+            var resetBtn=document.querySelector("#reset");
+            var sortSel=document.querySelector("#sort");
+            var sliderVal=document.querySelector("#size");
+            sliderVal.addEventListener("change",function(){
+                if(!startSort){
+                    numRects=sliderVal.value;
+                    if(window/numRects<5)
+                        gap=5;
+                    else
+                        gap=window/numRects;
+                    currRects.forEach(function(prop){
+                        prop[1].fillColor="#ffffff";
+                    });
+                    allRects=[];
+                    rect();
+                    currRects=allRects.slice();
+                    i=0,j=0;
+                }
+            });
+            var startSort=false;
+            startBtn.addEventListener("click",function(){
+                startSort=true;
+            });
+            stopBtn.addEventListener("click",function(){
+                startSort=false;
+            });
+            resetBtn.addEventListener("click",function(){
+                startSort=false;
+                currRects.forEach(function(prop){
+                    prop[1].fillColor="#ffffff";
+                });
+                allRects=[];
+                rect();
+                currRects=allRects.slice();
+                i=0,j=0;
+            });
+            function rect(){
+                var currStart=20;
+                for(var i=0;i<numRects;i++){
+                    var size=new Size(view.size.width,view.size.height)*Size.random();
+                    size.width=width;
+                    var start=new Point(10,20);
+                    start.x=currStart;
+                    start.y=view.size.height-size.height;
+
+                    var rect = new Rectangle(start,size);
+                    var path = new Path.Rectangle(rect);
+                    path.fillColor = '#51c2d5';
+                    allRects.push([rect,path]);
+
+                    currStart+=gap;
+                }
+            }
+            rect();
+            var currRects=allRects.slice();
+            var i=0,j=0;
+            function onFrame(event){
+                if(startSort){
+                    if(i<currRects.length){
+                        if(currRects[j][0].height>currRects[j+1][0].height){
+                            var hyt1=currRects[j][0].height,hyt2=currRects[j+1][0].height;
+                            var x1=currRects[j][0].x,y1=currRects[j][0].y,x2=currRects[j+1][0].x,y2=currRects[j+1][0].y;
+                    
+                            var path1=currRects[j][1];
+                            path1.fillColor="#ffffff";
+                            var path2=currRects[j+1][1];
+                            path2.fillColor="#ffffff";
+                    
+                            var rect3=new Rectangle(x1,y2,width,hyt2)
+                            var path3=new Path.Rectangle(rect3);
+                            path3.fillColor = '#51c2d5';
+                            var rect4=new Rectangle(x2,y1,width,hyt1)
+                            var path4=new Path.Rectangle(rect4);
+                            path4.fillColor = '#51c2d5';
+                    
+                            currRects[j][0]=rect3;
+                            currRects[j][1]=path3;
+                            currRects[j+1][0]=rect4;
+                            currRects[j+1][1]=path4;
+                        }
+                        j++;
+                        if(j>=currRects.length-i-1){
+                            currRects[j][1].fillColor=new Color(0,1,0);
+                            j=0;
+                            i++;
+                        }
+                    }else{
+                        currRects[0][1].fillColor=new Color(0,1,0);
+                    }
+              
+                }
+            }
+        </script>
+    </head>
+    <body>
+        <div class="container">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-lg p-3 mb-5 bg-body rounded">
+            <h1 class="col-lg-6 header">Bubble Sort Visualiser</h1>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class=" opts collapse navbar-collapse col-lg-6 " id="navbarNav">
+              <ul class="navbar-nav">
+                <li class="nav-item">
+                    <button type="button" class="btn btn-outline-warning btn-md" ><p>Density Variator: </p></button>
+                </li>
+                <li class="nav-item sliderVal">
+                    <input type="range" min="20" max="220" value="100" class="slider" id="size">
+                </li>
+                <li class="nav-item start">
+                    <button type="button" class="btn btn-outline-warning btn-md" value="Start" id="start"><p>Start</p></button>
+                </li>
+                <li class="nav-item stop">
+                    <button type="button" class="btn btn-outline-warning btn-md" value="Stop" id="stop"><p>Stop</p></button>
+                </li>
+                <li class="nav-item reset">
+                    <button type="button" class="btn btn-outline-warning btn-md"value="Reset" id="reset"><p>Reset</p></button>
+                </li>
+              </ul>
+            </div>
+          </nav>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
+        <canvas id="myCanvas" class="rounded-3 shadow-lg p-3 mb-5 bg-body rounded" resize></canvas>
+    </body>
+</html>

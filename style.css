@@ -1,0 +1,55 @@
+body,html{
+    margin: 0;
+    width: 100%;
+    height: 100%;
+}
+canvas{
+    width: 100%;
+    background-color: #eff7e1;
+    height: 100%;
+}
+.header{
+    text-align: center;
+    font-family: 'Bebas Neue', cursive;
+    font-size:5rem
+}
+.btn{
+    border:none;
+}
+.opts{
+    display: flex;
+    flex-direction: row-reverse;
+    align-items:right;
+    float: right;
+}
+p{
+    color: #51c2d5;
+    margin: auto;
+    font-size: large;
+    font-family: 'Merriweather Sans', sans-serif;
+    letter-spacing: 1px;
+    font-weight: 500;
+    
+}
+.navbar{
+    border-left: 1rem solid #ffe227;
+    border-right: 1rem solid #ffe227;
+}
+
+.start{
+    margin: auto;
+}
+.stop{
+    margin: auto;
+}
+.reset{
+    margin: auto;
+}
+.sliderVal{
+    margin: auto;
+    padding-top: 5px;
+    padding-right: 5px;
+}
+canvas{
+    margin-top:2rem;
+}
